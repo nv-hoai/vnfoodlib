@@ -87,3 +87,7 @@ coverage
 *.db
 backup/
 *.backup
+FoodData.csv
+
+# Uploads
+uploads/

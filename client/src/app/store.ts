@@ -7,6 +7,10 @@ import { mealSchedulingApi } from '../features/mealScheduling/api/mealScheduling
 import mealSchedulingReducer from '../features/mealScheduling/slices/mealSchedulingSlice';
 import { collectionsApi } from '../features/collections/api/collectionsApi';
 import collectionsReducer from '../features/collections/slices/collectionsSlice';
+import { foodApi } from '../features/foods/api/foodApi';
+import { contributionsApi } from '../features/contributions/api/contributionsApi';
+import { adminApi } from '../features/admin/api/adminApi';
+import { notificationsApi } from '../features/notifications/api/notificationsApi';
 
 export const store = configureStore({
   reducer: {
@@ -18,13 +22,21 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [mealSchedulingApi.reducerPath]: mealSchedulingApi.reducer,
     [collectionsApi.reducerPath]: collectionsApi.reducer,
+    [foodApi.reducerPath]: foodApi.reducer,
+    [contributionsApi.reducerPath]: contributionsApi.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       authApi.middleware,
       userApi.middleware,
       mealSchedulingApi.middleware,
-      collectionsApi.middleware
+      collectionsApi.middleware,
+      foodApi.middleware,
+      contributionsApi.middleware,
+      adminApi.middleware,
+      notificationsApi.middleware
     ),
 });
 

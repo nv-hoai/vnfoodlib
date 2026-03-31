@@ -14,6 +14,10 @@ import authRoutes from './features/auth/routes/authRoutes.js';
 import userRoutes from './features/users/routes/userRoutes.js';
 import mealSchedulingRoutes from './features/mealScheduling/routes/mealSchedulingRoutes.js';
 import collectionsRoutes from './features/collections/routes/collectionsRoutes.js';
+import foodRoutes from './features/foods/routes/foodRoutes.js';
+import contributionRoutes from './features/contributions/routes/contributionRoutes.js';
+import adminRoutes from './features/admin/routes/adminRoutes.js';
+import notificationRoutes from './features/notifications/routes/notificationRoutes.js';
 
 //import error middleware
 import errorHandler from './middleware/errorMiddleware.js';
@@ -36,11 +40,18 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
+//Serve static files (uploads)
+app.use('/uploads', express.static('public/uploads'));
+
 //Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/meal-schedules', mealSchedulingRoutes);
 app.use('/api/collections', collectionsRoutes);
+app.use('/api/foods', foodRoutes);
+app.use('/api/contributions', contributionRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 //Health check route
 app.get('/api/health', (req: Request, res: Response) => {

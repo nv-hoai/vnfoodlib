@@ -110,18 +110,26 @@ const Calendar: FC<CalendarProps> = ({ onDateSelect }) => {
       <div className="grid grid-cols-7 gap-2">
         {calendarDays.map((day, index) => {
           const dayString = day ? formatLocalDateString(day) : null;
+          const hasSchedule = schedules.some(s => s.date === dayString);
           return (
             <button
               key={index}
               onClick={() => handleDateClick(dayString)}
               className={`
-                h-24 p-2 rounded cursor-pointer transition border-2
+                h-24 p-2 rounded cursor-pointer transition border-2 relative
                 ${dayString === selectedDateString ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}
                 ${day ? 'bg-white' : 'bg-gray-50 opacity-50'}
               `}
               disabled={!day}
             >
-              {day && <span className="font-semibold text-gray-800">{day.getDate()}</span>}
+              {day && (
+                <>
+                  <span className="font-semibold text-gray-800">{day.getDate()}</span>
+                  {hasSchedule && (
+                    <div className="absolute bottom-2 right-2 w-2 h-2 bg-blue-500 rounded-full"></div>
+                  )}
+                </>
+              )}
             </button>
           );
         })}

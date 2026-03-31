@@ -16,19 +16,18 @@ const router: Router = express.Router();
 
 // Public routes (no auth required)
 router.get('/public', getPublicCollections);
-router.get('/:id', getCollectionById);
 
 // Protect routes below
 router.use(protect);
 
-// Create collection
-router.post('/', createCollection);
-
-// Get user collections
+// Get user collections (must be before :id route)
 router.get('/', getUserCollections);
 
-// Search collections
+// Search collections (must be before :id route)
 router.get('/search', searchCollections);
+
+// Create collection
+router.post('/', createCollection);
 
 // Update collection
 router.patch('/:id', updateCollection);
@@ -37,9 +36,12 @@ router.patch('/:id', updateCollection);
 router.delete('/:id', deleteCollection);
 
 // Add dish to collection
-router.post('/dish/add', addDishToCollection);
+router.post('/:id/add-dish', addDishToCollection);
 
 // Remove dish from collection
-router.post('/dish/remove', removeDishFromCollection);
+router.post('/:id/remove-dish', removeDishFromCollection);
+
+// Get collection by ID (must be last because of param)
+router.get('/:id', getCollectionById);
 
 export default router;

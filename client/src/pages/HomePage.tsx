@@ -1,25 +1,18 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGetFoodRankingQuery, useGetAllFoodsQuery } from '../features/foods/api/foodApi';
 import Button from '../shared/components/Button';
 
 const HomePage: FC = () => {
-  // Sample ranking data
-  const rankings = [
-    { rank: 1, name: 'Phở Bò Hà Nội', votes: 2850, category: 'Phở' },
-    { rank: 2, name: 'Bánh Mì Sài Gòn', votes: 2420, category: 'Bánh Mì' },
-    { rank: 3, name: 'Cơm Tấm Tây Ninh', votes: 2150, category: 'Cơm' },
-    { rank: 4, name: 'Bún Chả Hà Nội', votes: 1980, category: 'Bún' },
-    { rank: 5, name: 'Nem Rán', votes: 1850, category: 'Nem' }
-  ];
-
-  // Sample gallery data
-  const galleryImages = [
-    { id: 1, title: 'Phở Bò', category: 'Phở' },
-    { id: 2, title: 'Bánh Mì', category: 'Bánh Mì' },
-    { id: 3, title: 'Cơm Tấm', category: 'Cơm' },
-    { id: 4, title: 'Bún Chả', category: 'Bún' },
-    { id: 5, title: 'Nem Rán', category: 'Nem' },
-    { id: 6, title: 'Gỏi Cuốn', category: 'Gỏi' }
-  ];
+  const navigate = useNavigate();
+  const { data, isLoading } = useGetFoodRankingQuery({ limit: 10, sortBy: 'combined' });
+  const { data: likeRankingData, isLoading: likeLoading } = useGetFoodRankingQuery({ limit: 10, sortBy: 'likes' });
+  const { data: recommendRankingData, isLoading: recommendLoading } = useGetFoodRankingQuery({ limit: 10, sortBy: 'recommendations' });
+  const { data: galleryData } = useGetAllFoodsQuery({ page: 1, limit: 6 });
+  const rankings = data?.data?.foods || [];
+  const likeRankings = likeRankingData?.data?.foods || [];
+  const recommendRankings = recommendRankingData?.data?.foods || [];
+  const galleryFoods = galleryData?.data?.foods || [];
 
   return (
     <div className="flex-1">
@@ -32,7 +25,11 @@ const HomePage: FC = () => {
           <p className="text-2xl md:text-3xl text-gray-600 mb-8 leading-relaxed">
             Khám phá hàng trăm món ăn đậm đà bản sắc dân tộc và giá trị ẩm thực truyền thống
           </p>
-          <Button variant="primary" className="text-lg px-10 py-4 h-auto">
+          <Button 
+            variant="primary" 
+            className="text-lg px-10 py-4 h-auto"
+            onClick={() => navigate('/foods')}
+          >
             Khám Phá Ngay
           </Button>
         </div>
@@ -79,46 +76,95 @@ const HomePage: FC = () => {
         </div>
       </section>
 
-      {/* Ranking Table Section */}
+      {/* Ranking Tables Section */}
       <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Bảng Xếp Hạng Món Ăn
-          </h2>
-          <div className="overflow-x-auto bg-white rounded-lg shadow">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                  <th className="px-6 py-4 text-left font-semibold">Xếp Hạng</th>
-                  <th className="px-6 py-4 text-left font-semibold">Tên Món Ăn</th>
-                  <th className="px-6 py-4 text-left font-semibold">Chuyên Mục</th>
-                  <th className="px-6 py-4 text-center font-semibold">Lượt Bình Chọn</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rankings.map((item) => (
-                  <tr key={item.rank} className="border-b hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 font-bold rounded-full">
-                        {item.rank}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-gray-800">{item.name}</td>
-                    <td className="px-6 py-4 text-gray-600">{item.category}</td>
-                    <td className="px-6 py-4 text-center">
-                      <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                        {item.votes.toLocaleString()}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="text-center mt-8">
-            <Button variant="primary">
-              Xem Tất Cả Xếp Hạng
-            </Button>
+        <div className="max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Likes Ranking Table */}
+            <div>
+              <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Xếp Hạng Lượt Thích</h3>
+              <div className="bg-white rounded-lg shadow">
+                {likeLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-gray-600">Đang tải xếp hạng...</p>
+                  </div>
+                ) : likeRankings.length > 0 ? (
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-red-500 to-pink-500 text-white">
+                        <th className="px-3 py-2 text-left font-semibold w-8">STT</th>
+                        <th className="px-3 py-2 text-left font-semibold w">Tên Món</th>
+                        <th className="px-3 py-2 text-center font-semibold w-12">Thích</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {likeRankings.map((food: any, index: number) => (
+                        <tr key={food._id} className="border-b last:border-b-0 hover:bg-gray-50 transition cursor-pointer" onClick={() => navigate(`/foods/${food._id}`)}>
+                          <td className="px-3 py-2">
+                            <span className="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 font-bold rounded-full text-xs">
+                              {index + 1}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 font-medium text-gray-800 truncate">{food.name}</td>
+                          <td className="px-3 py-2 text-center">
+                            <span className="inline-block bg-red-100 text-red-700 px-2 py-0.5 rounded font-semibold text-xs">
+                              {food.likeCount || 0}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Recommendations Ranking Table */}
+            <div>
+              <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Xếp Hạng Đề Cử</h3>
+              <div className="bg-white rounded-lg shadow">
+                {recommendLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-gray-600">Đang tải xếp hạng...</p>
+                  </div>
+                ) : recommendRankings.length > 0 ? (
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+                        <th className="px-3 py-2 text-left font-semibold w-8">STT</th>
+                        <th className="px-3 py-2 text-left font-semibold">Tên Món</th>
+                        <th className="px-3 py-2 text-center font-semibold w-16">Đề Cử</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recommendRankings.map((food: any, index: number) => (
+                        <tr key={food._id} className="border-b last:border-b-0 hover:bg-gray-50 transition cursor-pointer" onClick={() => navigate(`/foods/${food._id}`)}>
+                          <td className="px-3 py-2">
+                            <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 font-bold rounded-full text-xs">
+                              {index + 1}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 font-medium text-gray-800 truncate">{food.name}</td>
+                          <td className="px-3 py-2 text-center">
+                            <span className="inline-block bg-green-100 text-green-700 px-2 py-0.5 rounded font-semibold text-xs">
+                              {food.recommendationCount || 0}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -130,46 +176,56 @@ const HomePage: FC = () => {
             Bộ Sưu Tập Món Ăn
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryImages.map((image) => (
-              <div
-                key={image.id}
-                className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
-              >
-                {/* Image Placeholder */}
-                <div className="w-full h-64 bg-gradient-to-br from-orange-200 via-red-200 to-yellow-200 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-gray-700">{image.title}</span>
-                </div>
+            {galleryFoods.map((food: any) => {
+              let imageUrl = food.image;
+              
+              // Handle image URL
+              if (!imageUrl.startsWith('http')) {
+                // Add leading slash if not present
+                if (!imageUrl.startsWith('/')) {
+                  imageUrl = '/' + imageUrl;
+                }
+                imageUrl = `http://localhost:5000${imageUrl}`;
+              }
+              
+              return (
+                <div
+                  key={food._id}
+                  className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 cursor-pointer bg-gray-200"
+                  onClick={() => navigate(`/foods/${food._id}`)}
+                >
+                  {/* Image */}
+                  <img
+                    src={imageUrl}
+                    alt={food.name}
+                    className="w-full h-64 object-cover transition"
+                    onError={(e) => {
+                      const img = e.target as HTMLImageElement;
+                      if (!img.src.includes('placeholder')) {
+                        img.src = 'https://via.placeholder.com/300x240?text=' + encodeURIComponent(food.name);
+                      }
+                    }}
+                  />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition flex items-end p-4">
-                  <div className="text-white opacity-0 group-hover:opacity-100 transition">
-                    <h3 className="text-xl font-bold">{image.title}</h3>
-                    <p className="text-sm">{image.category}</p>
+                  {/* Overlay - chỉ hiển thị khi hover */}
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition pointer-events-none flex items-end p-4">
+                    <div className="text-white">
+                      <h3 className="text-xl font-bold">{food.name}</h3>
+                      <p className="text-sm">{food.tags?.category?.[0] || 'Món ăn'}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="text-center mt-10">
-            <Button variant="outline">
+            <Button 
+              variant="outline"
+              onClick={() => navigate('/foods')}
+            >
               Xem Thêm Ảnh
             </Button>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-500 to-purple-500">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Tham Gia Cộng Đồng Ẩm Thực
-          </h2>
-          <p className="text-lg text-blue-100 mb-8">
-            Chia sẻ công thức, bình chọn món ăn yêu thích và kết nối với những người đam mê ẩm thực
-          </p>
-          <Button variant="outline" className="bg-white text-blue-600 hover:bg-gray-100">
-            Đăng Ký Ngay
-          </Button>
         </div>
       </section>
     </div>

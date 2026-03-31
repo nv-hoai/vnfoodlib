@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from '../../../app/api';
 
 export interface Collection {
   _id: string;
@@ -10,6 +11,14 @@ export interface Collection {
   tags?: string[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CollectionResponse {
+  status: string;
+  data: {
+    collection?: Collection;
+    collections?: Collection[];
+  };
 }
 
 export interface CreateCollectionPayload {
@@ -30,39 +39,40 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 export const collectionsApi = createApi({
   reducerPath: 'collectionsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/collections`,
-    credentials: 'include'
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Collection'],
   endpoints: (builder) => ({
     createCollection: builder.mutation<Collection, CreateCollectionPayload>({
       query: (payload) => ({
-        url: '/',
+        url: '/collections/',
         method: 'POST',
         body: payload
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collection!,
       invalidatesTags: ['Collection']
     }),
 
     getUserCollections: builder.query<Collection[], void>({
       query: () => ({
-        url: '/'
+        url: '/collections/'
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collections || [],
       providesTags: ['Collection']
     }),
 
     getPublicCollections: builder.query<Collection[], void>({
       query: () => ({
-        url: '/public'
+        url: '/collections/public'
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collections || [],
       providesTags: ['Collection']
     }),
 
     getCollectionById: builder.query<Collection, string>({
       query: (id) => ({
-        url: `/${id}`
+        url: `/collections/${id}`
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collection!,
       providesTags: ['Collection']
     }),
 
@@ -71,16 +81,17 @@ export const collectionsApi = createApi({
       { id: string; payload: UpdateCollectionPayload }
     >({
       query: ({ id, payload }) => ({
-        url: `/${id}`,
+        url: `/collections/${id}`,
         method: 'PATCH',
         body: payload
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collection!,
       invalidatesTags: ['Collection']
     }),
 
     deleteCollection: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/collections/${id}`,
         method: 'DELETE'
       }),
       invalidatesTags: ['Collection']
@@ -91,10 +102,11 @@ export const collectionsApi = createApi({
       { collectionId: string; dishId: string }
     >({
       query: (payload) => ({
-        url: '/dish/add',
+        url: '/collections/dish/add',
         method: 'POST',
         body: payload
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collection!,
       invalidatesTags: ['Collection']
     }),
 
@@ -103,18 +115,20 @@ export const collectionsApi = createApi({
       { collectionId: string; dishId: string }
     >({
       query: (payload) => ({
-        url: '/dish/remove',
+        url: '/collections/dish/remove',
         method: 'POST',
         body: payload
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collection!,
       invalidatesTags: ['Collection']
     }),
 
     searchCollections: builder.query<Collection[], string>({
       query: (keyword) => ({
-        url: '/search',
+        url: '/collections/search',
         params: { keyword }
       }),
+      transformResponse: (response: CollectionResponse) => response.data.collections || [],
       providesTags: ['Collection']
     })
   })

@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from '../../../app/api';
 
 export interface MealSchedule {
   _id: string;
@@ -26,30 +27,37 @@ export interface CreateMealSchedulePayload {
   notes?: string;
 }
 
+export interface MealScheduleResponse {
+  status: string;
+  data: {
+    schedule?: MealSchedule;
+    schedules?: MealSchedule[];
+  };
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export const mealSchedulingApi = createApi({
   reducerPath: 'mealSchedulingApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${API_BASE_URL}/meal-schedules`,
-    credentials: 'include'
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['MealSchedule'],
   endpoints: (builder) => ({
     createMealSchedule: builder.mutation<MealSchedule, CreateMealSchedulePayload>({
       query: (payload) => ({
-        url: '/',
+        url: '/meal-schedules/',
         method: 'POST',
         body: payload
       }),
+      transformResponse: (response: MealScheduleResponse) => response.data.schedule!,
       invalidatesTags: ['MealSchedule']
     }),
 
-    getMealScheduleByDate: builder.query<MealSchedule, string>({
+    getMealScheduleByDate: builder.query<MealSchedule | null, string>({
       query: (date) => ({
-        url: '/date',
+        url: '/meal-schedules/date',
         params: { date }
       }),
+      transformResponse: (response: MealScheduleResponse) => response.data.schedule || null,
       providesTags: ['MealSchedule']
     }),
 
@@ -58,9 +66,10 @@ export const mealSchedulingApi = createApi({
       { startDate: string; endDate: string }
     >({
       query: ({ startDate, endDate }) => ({
-        url: '/range',
+        url: '/meal-schedules/range',
         params: { startDate, endDate }
       }),
+      transformResponse: (response: MealScheduleResponse) => response.data.schedules || [],
       providesTags: ['MealSchedule']
     }),
 
@@ -69,9 +78,10 @@ export const mealSchedulingApi = createApi({
       { year: number; month: number }
     >({
       query: ({ year, month }) => ({
-        url: '/month',
+        url: '/meal-schedules/month',
         params: { year, month }
       }),
+      transformResponse: (response: MealScheduleResponse) => response.data.schedules || [],
       providesTags: ['MealSchedule']
     }),
 
@@ -80,16 +90,17 @@ export const mealSchedulingApi = createApi({
       { id: string; payload: Partial<CreateMealSchedulePayload> }
     >({
       query: ({ id, payload }) => ({
-        url: `/${id}`,
+        url: `/meal-schedules/${id}`,
         method: 'PATCH',
         body: payload
       }),
+      transformResponse: (response: MealScheduleResponse) => response.data.schedule!,
       invalidatesTags: ['MealSchedule']
     }),
 
     deleteMealSchedule: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/meal-schedules/${id}`,
         method: 'DELETE'
       }),
       invalidatesTags: ['MealSchedule']

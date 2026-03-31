@@ -22,7 +22,7 @@ const registerValidation = [
   body('password')
     .notEmpty().withMessage('Vui lòng nhập mật khẩu')
     .isLength({ min: 6 }).withMessage('Mật khẩu phải có ít nhất 6 ký tự')
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/).withMessage('Mật khẩu phải chứa ít nhất một chữ cái và một số')
+    .matches(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/).withMessage('Mật khẩu phải chứa ít nhất một chữ cái và một số')
 ];
 
 const loginValidation = [

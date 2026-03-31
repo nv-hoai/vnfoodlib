@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 const AboutPage: FC = () => {
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl p-6 mx-auto">
       <h1 className="text-3xl font-bold mb-6">Về chúng tôi</h1>
 
       <div className="space-y-6">

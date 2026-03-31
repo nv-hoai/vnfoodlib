@@ -5,11 +5,22 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'moderator';
+  status: 'active' | 'suspended' | 'banned';
   isActive: boolean;
   lastLogin?: Date;
+  lastActive?: Date;
   passwordChangedAt?: Date;
   tokenVersion: number;
+  
+  // Contribution tracking
+  contributionsCount: number;
+  approvedContributions: number;
+  
+  // Suspension/Ban info
+  suspendedUntil?: Date;
+  suspendReason?: string;
+  
   comparePassword(candidatePassword: string): Promise<boolean>;
   createdAt: Date;
   updatedAt: Date;
@@ -42,8 +53,13 @@ const userSchema = new Schema<IUser>({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'admin', 'moderator'],
     default: 'user'
+  },
+  status: {
+    type: String,
+    enum: ['active', 'suspended', 'banned'],
+    default: 'active'
   },
   isActive: {
     type: Boolean,
@@ -52,16 +68,42 @@ const userSchema = new Schema<IUser>({
   lastLogin: {
     type: Date
   },
+  lastActive: {
+    type: Date
+  },
   passwordChangedAt: {
     type: Date
   },
   tokenVersion: {
     type: Number,
     default: 0
+  },
+  contributionsCount: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  approvedContributions: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  suspendedUntil: {
+    type: Date
+  },
+  suspendReason: {
+    type: String,
+    maxlength: [500, 'Lý do khóa tài khoản không được quá 500 ký tự']
   }
 }, {
   timestamps: true
 });
+
+// Indexes for efficient querying
+userSchema.index({ status: 1 });
+userSchema.index({ role: 1 });
+userSchema.index({ suspendedUntil: 1 });
+userSchema.index({ createdAt: -1 });
 
 // Middleware to hash password and increment token version before saving
 userSchema.pre<IUser>('save', async function() {

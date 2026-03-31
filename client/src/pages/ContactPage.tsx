@@ -8,7 +8,7 @@ const ContactPage: FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl p-6 mx-auto">
       <h1 className="text-3xl font-bold mb-6">Liên hệ với chúng tôi</h1>
 
       <div className="bg-white p-6 rounded-lg shadow mb-8">

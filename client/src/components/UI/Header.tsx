@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Button from '../../shared/components/Button';
 import { useLogoutMutation } from '../../features/auth/api/authApi';
+import NotificationBell from '../../features/notifications/components/NotificationBell';
 import type { RootState } from '../../app/store';
 
 const Header: FC = () => {
@@ -33,20 +34,11 @@ const Header: FC = () => {
           Thư viện món ăn Việt Nam
         </Link>
 
-        <ul className='flex-1 flex justify-start items-center gap-6 ml-8'>
+        {/* Main Navigation - Left */}
+        <ul className='flex justify-start items-center gap-6 ml-8'>
           <li>
-            <Link to='/' className='text-gray-700 hover:text-blue-600 transition'>
-              Trang chủ
-            </Link>
-          </li>
-          <li>
-            <Link to='/meal-scheduling' className='text-gray-700 hover:text-blue-600 transition'>
-              Lịch ăn
-            </Link>
-          </li>
-          <li>
-            <Link to='/collections' className='text-gray-700 hover:text-blue-600 transition'>
-              Bộ sưu tập
+            <Link to='/foods' className='text-gray-700 hover:text-blue-600 transition'>
+              Thư viện
             </Link>
           </li>
           <li>
@@ -61,10 +53,29 @@ const Header: FC = () => {
           </li>
         </ul>
 
-        <div className='flex justify-center items-center gap-2 ml-auto'>
+        {/* Right Section - Personal Links, Notification, User Menu */}
+        <div className='flex-1 flex justify-end items-center gap-6'>
+          {isAuthenticated && (
+            <>
+              <Link to='/meal-scheduling' className='text-gray-700 hover:text-blue-600 transition'>
+                Lịch ăn
+              </Link>
+              <Link to='/collections' className='text-gray-700 hover:text-blue-600 transition'>
+                Bộ sưu tập
+              </Link>
+              <Link to='/my-contributions' className='text-gray-700 hover:text-blue-600 transition'>
+                Đóng góp
+              </Link>
+            </>
+          )}
+        </div>
+
+        <div className='flex justify-center items-center gap-2 ml-6'>
           {isAuthenticated && user ? (
-            // User logged in - show user menu
-            <div className='relative'>
+            <>
+              <NotificationBell />
+              {/* User logged in - show user menu */}
+              <div className='relative'>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className='flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition'
@@ -80,6 +91,9 @@ const Header: FC = () => {
                   <div className='px-4 py-3 border-b border-gray-100'>
                     <p className='text-sm font-semibold text-gray-900'>{user.name}</p>
                     <p className='text-xs text-gray-500'>{user.email}</p>
+                    {user.role === 'admin' && (
+                      <p className='text-xs text-red-600 font-semibold mt-1'>ADMIN</p>
+                    )}
                   </div>
                   <button
                     onClick={() => {
@@ -92,6 +106,26 @@ const Header: FC = () => {
                   </button>
                   <button
                     onClick={() => {
+                      navigate('/my-contributions');
+                      setIsDropdownOpen(false);
+                    }}
+                    className='w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition'
+                  >
+                    Đóng góp của tôi
+                  </button>
+                  {user.role === 'admin' && (
+                    <button
+                      onClick={() => {
+                        navigate('/admin');
+                        setIsDropdownOpen(false);
+                      }}
+                      className='w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition'
+                    >
+                      Trang Quản Trị
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
                       handleLogout();
                       setIsDropdownOpen(false);
                     }}
@@ -102,6 +136,7 @@ const Header: FC = () => {
                 </div>
               )}
             </div>
+            </>
           ) : (
             // User not logged in - show login/register buttons
             <>

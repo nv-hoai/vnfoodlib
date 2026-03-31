@@ -35,10 +35,25 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       });
     }
 
-    if (!user.isActive) {
+    if (!user.isActive || user.status === 'banned') {
       return res.status(401).json({
         success: false,
-        message: 'Tài khoản của bạn đã khóa'
+        message: 'Tài khoản của bạn đã khóa hoặc bị cấm'
+      });
+    }
+
+    // Auto-unsuspend if suspension period has passed
+    if (user.status === 'suspended' && user.suspendedUntil && new Date() > user.suspendedUntil) {
+      user.status = 'active';
+      user.suspendedUntil = undefined;
+      await user.save();
+    }
+
+    // Check if currently suspended
+    if (user.status === 'suspended') {
+      return res.status(401).json({
+        success: false,
+        message: `Tài khoản của bạn đã bị khóa tạm thời. Hạn khóa: ${user.suspendedUntil?.toLocaleDateString('vi-VN')}`
       });
     }
 
