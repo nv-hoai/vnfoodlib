@@ -1,270 +1,262 @@
-# VN Food Library - Monorepo
+# VN Food Library
 
-A full-stack web application for managing Vietnamese food library, recipes, and meal scheduling.
+A comprehensive full-stack web application for managing Vietnamese food recipes, meal scheduling, and building personalized food collections. This platform enables users to explore a rich library of Vietnamese dishes, plan their meals, and contribute new recipes to the community with an admin approval system.
 
-## Project Structure
+## Features
 
+- User Authentication & Authorization
+  - JWT-based authentication with refresh token rotation
+  - Secure password hashing with bcryptjs
+  - Protected routes and API endpoints
+  
+- Food Library Management
+  - Complete food database with nutritional information
+  - Search and filter foods by category, ingredients, cuisine
+  - Like and recommendation system
+  
+- Meal Planning & Scheduling
+  - Monthly calendar view with meal planning
+  - Create and manage daily meal schedules
+  - Track meals by type (breakfast, lunch, dinner, snacks)
+  
+- Collections System
+  - Create custom food collections
+  - Add/remove dishes from collections
+  - Public and private collection settings
+  - Share collections with community
+  
+- Contribution System
+  - Submit new food recipes to the library
+  - Suggest edits to existing foods
+  - Admin approval workflow
+  - Activity tracking and audit logs
+  
+- Notifications
+  - Real-time notifications for users
+  - Admin broadcast messaging
+  - Mark notifications as read
+  - Notification history
+  
+- Admin Dashboard
+  - System statistics and analytics
+  - Contribution approval panel
+  - User management
+  - Activity monitoring
+  - Admin notifications system
+
+## Tech Stack
+
+Frontend
+- React 19 with TypeScript
+- Redux Toolkit with RTK Query for state management
+- React Router v6 for routing
+- Tailwind CSS for styling
+- Vite as build tool
+
+Backend
+- Node.js v24 with Express.js
+- TypeScript with ES modules
+- MongoDB for database
+- Mongoose for ODM
+- JWT for authentication
+
+## Architecture
+
+The project follows a feature-based modular architecture to ensure scalability and maintainability.
+
+Frontend Structure:
 ```
-vnfoodlibrary/
-├── client/              # React + TypeScript + Vite frontend
-│   ├── src/
-│   ├── package.json
-│   ├── .env.example
-│   └── README.md
-├── server/              # Node.js + Express + MongoDB backend
-│   ├── src/
-│   ├── package.json
-│   ├── .env.example
-│   └── README.md
-├── .gitignore
-├── README.md
-└── .env.example
+client/src/
+├── features/
+│   ├── auth/          (Authentication slices and API)
+│   ├── collections/   (Collections API and components)
+│   ├── foods/         (Foods API endpoints)
+│   ├── meals/         (Meal scheduling features)
+│   ├── users/         (User profile management)
+│   ├── notifications/ (Notifications system)
+│   ├── admin/         (Admin dashboard features)
+│   └── contributions/ (Contribution workflow)
+├── pages/             (Page components)
+├── components/        (Shared UI components)
+├── app/               (Redux store configuration)
+└── shared/            (Utilities and helpers)
 ```
 
-## Quick Start
+Backend Structure:
+```
+server/src/
+├── features/
+│   ├── auth/          (Authentication routes and controllers)
+│   ├── users/         (User management)
+│   ├── collections/   (Collections business logic)
+│   ├── foods/         (Food library)
+│   ├── meals/         (Meal scheduling)
+│   ├── notifications/ (Notification system)
+│   ├── activities/    (Audit logging)
+│   └── contributions/ (Contribution management)
+├── middleware/        (Express middleware)
+├── utils/             (Helper functions)
+└── config/            (Database and app setup)
+```
+
+## Demo
+
+Homepage showcasing the Vietnamese food library
+
+![Homepage](images/homepage.png)
+
+Food library with search and filtering capabilities
+
+![Food Library](images/library.png)
+
+## Installation & Setup
 
 ### Prerequisites
 
 - Node.js v18+ and npm/yarn
 - MongoDB Atlas account (or local MongoDB)
+- Git for version control
 
-### 1. Setup Backend
+### Backend Setup
 
 ```bash
 cd server
 npm install
 
-# Create .env from .env.example
 cp .env.example .env.local
-# Edit .env.local with your MongoDB URI and secrets
-
-npm run dev
 ```
 
-Backend runs on http://localhost:5000
-
-### 2. Setup Frontend
-
-```bash
-cd client
-npm install
-
-# Create .env from .env.example
-cp .env.example .env.local
-# (Default API_URL points to http://localhost:5000/api)
-
-npm run dev
-```
-
-Frontend runs on http://localhost:5173
-
-## Environment Variables
-
-### Backend (.env.local)
-
+Edit `.env.local` with your configuration:
 ```
 PORT=5000
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
 JWT_ACCESS_SECRET=your-secret-key
-JWT_REFRESH_SECRET=your-secret-key
+JWT_REFRESH_SECRET=your-refresh-key
 ACCESS_TOKEN_EXPIRE=15m
 REFRESH_TOKEN_EXPIRE=7d
 NODE_ENV=development
 CLIENT_URL=http://localhost:5173
 ```
 
-### Frontend (.env.local)
+Start the backend server:
+```bash
+npm run dev
+```
 
+Backend will run on http://localhost:5000
+
+### Frontend Setup
+
+```bash
+cd client
+npm install
+
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
 ```
 VITE_API_BASE_URL=http://localhost:5000/api
 VITE_APP_NAME=VN Food Library
 ```
 
-## Technologies
-
-### Frontend
-
-- React 19.2.0
-- TypeScript
-- Vite 7.3.1
-- Redux Toolkit + RTK Query
-- React Router v6
-- Tailwind CSS
-- React Hook Form + Zod
-
-### Backend
-
-- Node.js v24
-- Express.js v5
-- TypeScript with ESM
-- MongoDB + Mongoose
-- JWT Authentication
-- bcryptjs for password hashing
-
-## Git Workflow
-
-### First Time Setup
-
+Start the frontend development server:
 ```bash
-# Initialize git
-git init
-
-# Add all files
-git add .
-
-# Create initial commit
-git commit -m "chore: initial commit - VN Food Library monorepo"
-
-# Add remote repository
-git remote add origin https://github.com/yourusername/vnfoodlibrary.git
-
-# Push to main branch
-git push -u origin main
+npm run dev
 ```
 
-### Folder-Specific Commits
-
-```bash
-# Backend changes
-git add server/
-git commit -m "feat(server): add user profile update endpoint"
-
-# Frontend changes
-git add client/
-git commit -m "feat(client): create profile edit page"
-
-# Both
-git add .
-git commit -m "feat: integrate user profile management"
-```
-
-## Development
+Frontend will run on http://localhost:5173
 
 ### Running Both Services
 
-Terminal 1 - Backend:
+Terminal 1 - Start Backend:
 ```bash
-cd server
-npm run dev
+cd server && npm run dev
 ```
 
-Terminal 2 - Frontend:
+Terminal 2 - Start Frontend:
 ```bash
-cd client
-npm run dev
+cd client && npm run dev
 ```
 
-### Code Structure
+Open http://localhost:5173 in your browser to access the application.
 
-Backend (server/src/):
-- features/ - Feature modules (auth, users, meals, collections)
-- middleware/ - Express middleware (auth, validation, error)
-- utils/ - Utility functions (JWT, error handling)
-- config/ - Database and app configuration
+## Development Commands
 
-Frontend (client/src/):
-- features/ - Redux slices and RTK Query API endpoints
-- pages/ - Page components (Home, Login, Profile)
-- components/ - Reusable UI components
-- app/ - Store and Router configuration
-
-## Features Implemented
-
-- User authentication (register, login, JWT refresh)
-- User profile management (edit info, change password)
-- Protected routes with redirect
-- Responsive design with Tailwind CSS
-- Form validation with Zod
-- Type-safe API calls with RTK Query
-- Dynamic navbar based on auth state
-
-## Commit Convention
-
-```
-feat(scope): description        # New feature
-fix(scope): description         # Bug fix
-chore(scope): description       # Maintenance/configuration
-docs(scope): description        # Documentation
-refactor(scope): description    # Code refactoring
-```
-
-Scopes: client, server, api, auth, profile, db, etc.
-
-Examples:
-```
-feat(auth): implement JWT refresh token rotation
-fix(client): fix profile form validation error messages
-docs(server): add API documentation in README
-```
-
-## Contributing
-
-1. Create feature branch: git checkout -b feature/your-feature
-2. Commit changes with proper messages
-3. Push branch: git push origin feature/your-feature
-4. Create Pull Request
-
-## Common Tasks
-
-### Rebuild Frontend After Dependencies Change
-
+Backend:
 ```bash
-cd client
-rm -rf dist node_modules
-npm install
-npm run build
+npm run dev      # Start development server
+npm run build    # Build for production
+npm start        # Run production build
+npm test         # Run tests
 ```
 
-### Reset Backend To Fresh State
-
+Frontend:
 ```bash
-cd server
-rm -rf dist node_modules .env.local
-npm install
-cp .env.example .env.local
-# Edit .env.local with your config
-npm run dev
+npm run dev      # Start development server with HMR
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
 ```
 
-### Generate New JWT Secrets
+## Project Structure
 
-```bash
-node -e "console.log('Access:', require('crypto').randomBytes(32).toString('hex')); console.log('Refresh:', require('crypto').randomBytes(32).toString('hex'))"
 ```
+vnfoodlibrary/
+├── client/              # React + TypeScript frontend
+│   ├── src/
+│   │   ├── features/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── app/
+│   ├── package.json
+│   └── vite.config.ts
+├── server/              # Node.js + Express backend
+│   ├── src/
+│   │   ├── features/
+│   │   ├── middleware/
+│   │   ├── utils/
+│   │   └── config/
+│   ├── package.json
+│   └── tsconfig.json
+├── .gitignore
+└── README.md
+```
+
+## Database Schema
+
+User collections include meal schedules, personal food collections, contributions, and notifications. All data is properly indexed and includes timestamps for tracking creation and modifications.
 
 ## Troubleshooting
 
-### Frontend can't connect to API
+**Frontend cannot connect to backend**
+- Ensure backend is running on localhost:5000
+- Check VITE_API_BASE_URL in .env.local
+- Verify CORS settings in server/src/server.ts
 
-- Check backend is running on localhost:5000
-- Verify VITE_API_BASE_URL in .env.local
-- Check CORS settings in server/src/server.ts
+**MongoDB connection fails**
+- Confirm IP whitelist on MongoDB Atlas includes your IP
+- Verify connection string in .env.local
+- Check network connectivity
 
-### MongoDB connection error
-
-- Verify IP whitelist on MongoDB Atlas
-- Check connection string in .env.local
-- Ensure network connectivity
-
-### Port already in use
-
+**Port conflicts**
 ```bash
-# Frontend (port 5173)
+# Find process using port 5173
 lsof -i :5173
 kill -9 <PID>
 
-# Backend (port 5000)
+# Find process using port 5000
 lsof -i :5000
 kill -9 <PID>
 ```
 
-## Resources
+## Contributing
 
-- React Documentation: https://react.dev
-- Express.js Guide: https://expressjs.com
-- MongoDB Documentation: https://docs.mongodb.com
-- Vite Documentation: https://vitejs.dev
-- Redux Toolkit: https://redux-toolkit.js.org
+1. Fork the repository
+2. Create a feature branch: git checkout -b feature/your-feature
+3. Commit changes: git commit -m "feat: your feature description"
+4. Push to branch: git push origin feature/your-feature
+5. Open a pull request
 
 ## License
 
@@ -276,4 +268,4 @@ Your Name
 
 ---
 
-Last Updated: March 30, 2026
+Last Updated: April 1, 2026
