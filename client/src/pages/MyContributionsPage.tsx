@@ -54,10 +54,10 @@ const MyContributionsPage: FC = () => {
             + Thêm Món Mới
           </button>
           <button
-            onClick={() => navigate('/contributions/edit-food')}
+            onClick={() => navigate('/foods')}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium"
           >
-            ✏️ Chỉnh Sửa
+            ✏️ Chỉnh Sửa Món
           </button>
         </div>
       </div>

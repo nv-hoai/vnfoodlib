@@ -188,7 +188,7 @@ const FoodDetailPage: FC = () => {
                     navigate('/login');
                     return;
                   }
-                  navigate(`/contributions/edit-food?id=${food._id}`);
+                  navigate(`/contributions/edit-food/${food._id}`);
                 }}
                 className="py-2 px-4 bg-purple-500 text-white rounded-lg font-semibold hover:bg-purple-600 transition-colors"
               >
