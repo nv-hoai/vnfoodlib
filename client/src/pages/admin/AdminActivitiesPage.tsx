@@ -10,7 +10,7 @@ const AdminActivitiesPage: FC = () => {
   const { data: activitiesData, isLoading } = useGetActivitiesQuery({ page, limit, action: filterAction !== 'all' ? filterAction : undefined });
 
   const activities = activitiesData?.data?.activities || [];
-  const pagination = activitiesData?.data?.pagination;
+  const pagination = activitiesData?.data?.pagination || { page: 1, limit: 50, total: 0, pages: 1 };
 
   const actionLabels: { [key: string]: { label: string; color: string; icon: string } } = {
     approved_contribution: { label: 'Phê Duyệt Đóng Góp', color: 'bg-green-100 text-green-800', icon: '✓' },
@@ -148,7 +148,7 @@ const AdminActivitiesPage: FC = () => {
       )}
 
       {/* Pagination */}
-      {pagination && pagination.pages > 1 && (
+      {pagination && (pagination.pages || 1) > 1 && (
         <div className="flex justify-center gap-2 mt-6">
           <button
             onClick={() => setPage(Math.max(1, page - 1))}
@@ -158,7 +158,7 @@ const AdminActivitiesPage: FC = () => {
             Trước
           </button>
           <div className="flex items-center gap-2">
-            {Array.from({ length: pagination.pages }, (_, i) => i + 1).slice(Math.max(0, page - 2), page + 1).map((p) => (
+            {Array.from({ length: pagination.pages || 1 }, (_, i) => i + 1).slice(Math.max(0, page - 2), page + 1).map((p: number) => (
               <button
                 key={p}
                 onClick={() => setPage(p)}
@@ -173,8 +173,8 @@ const AdminActivitiesPage: FC = () => {
             ))}
           </div>
           <button
-            onClick={() => setPage(Math.min(pagination.pages, page + 1))}
-            disabled={page === pagination.pages}
+            onClick={() => setPage(Math.min(pagination.pages || 1, page + 1))}
+            disabled={page === (pagination.pages || 1)}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50"
           >
             Sau

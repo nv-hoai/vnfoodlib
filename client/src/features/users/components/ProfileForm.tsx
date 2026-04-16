@@ -2,16 +2,7 @@ import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { User } from '../../../types';
 
 interface ProfileFormProps {
   user: User;

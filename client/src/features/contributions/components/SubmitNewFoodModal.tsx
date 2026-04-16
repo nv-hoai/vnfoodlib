@@ -37,14 +37,14 @@ const SubmitNewFoodModal: FC<SubmitNewFoodModalProps> = ({ isOpen, onClose }) =>
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: IContributionData) => ({
       ...prev,
       [name]: value
     }));
   };
 
   const handleTagToggle = (tagType: 'category' | 'ingredient' | 'meal_time' | 'cooking_method' | 'taste' | 'purpose' | 'diet', value: string) => {
-    setFormData(prev => {
+    setFormData((prev: IContributionData) => {
       const currentTags = prev.tags?.[tagType] || [];
       const isSelected = currentTags.includes(value);
       
@@ -53,7 +53,7 @@ const SubmitNewFoodModal: FC<SubmitNewFoodModalProps> = ({ isOpen, onClose }) =>
         tags: {
           ...prev.tags!,
           [tagType]: isSelected
-            ? currentTags.filter(t => t !== value)
+            ? currentTags.filter((t: string) => t !== value)
             : [...currentTags, value]
         }
       };

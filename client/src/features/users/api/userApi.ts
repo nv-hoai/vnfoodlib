@@ -2,34 +2,13 @@ import { baseQueryWithReauth } from '../../../app/api';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { setUser } from '../slices/userSlice';
 import { setCredentials } from '../../auth';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface GetMeResponse {
-  user: User;
-}
-
-interface UpdateProfilePayload {
-  name?: string;
-  email?: string;
-}
-
-interface ChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-}
-
-interface ChangePasswordResponse {
-  accessToken: string;
-}
+import type { 
+  User,
+  GetMeResponse,
+  UpdateProfilePayload,
+  ChangePasswordPayload,
+  ChangePasswordResponse
+} from '../../../types';
 
 export const userApi = createApi({
   reducerPath: 'userApi',

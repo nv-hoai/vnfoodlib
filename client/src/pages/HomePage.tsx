@@ -78,92 +78,174 @@ const HomePage: FC = () => {
 
       {/* Ranking Tables Section */}
       <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Likes Ranking Table */}
-            <div>
+            <div className="flex flex-col">
               <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Xếp Hạng Lượt Thích</h3>
-              <div className="bg-white rounded-lg shadow">
-                {likeLoading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <p className="text-gray-600">Đang tải xếp hạng...</p>
-                  </div>
-                ) : likeRankings.length > 0 ? (
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="bg-gradient-to-r from-red-500 to-pink-500 text-white">
-                        <th className="px-3 py-2 text-left font-semibold w-8">STT</th>
-                        <th className="px-3 py-2 text-left font-semibold w">Tên Món</th>
-                        <th className="px-3 py-2 text-center font-semibold w-12">Thích</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {likeRankings.map((food: any, index: number) => (
-                        <tr key={food._id} className="border-b last:border-b-0 hover:bg-gray-50 transition cursor-pointer" onClick={() => navigate(`/foods/${food._id}`)}>
-                          <td className="px-3 py-2">
-                            <span className="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 font-bold rounded-full text-xs">
-                              {index + 1}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 font-medium text-gray-800 truncate">{food.name}</td>
-                          <td className="px-3 py-2 text-center">
-                            <span className="inline-block bg-red-100 text-red-700 px-2 py-0.5 rounded font-semibold text-xs">
-                              {food.likeCount || 0}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className="flex items-center justify-center py-8">
-                    <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
-                  </div>
-                )}
-              </div>
+              {likeLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-gray-600">Đang tải xếp hạng...</p>
+                </div>
+              ) : likeRankings.length > 0 ? (
+                <div className="space-y-4 flex-1">
+                  {/* Top 1 - Featured Card */}
+                  {likeRankings[0] && (
+                    <div
+                      className="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition transform hover:scale-105"
+                      onClick={() => navigate(`/foods/${likeRankings[0]._id}`)}
+                    >
+                      <div className="flex items-center p-4 gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-md">
+                            <span className="text-3xl font-bold text-red-600">🥇</span>
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-white truncate">{likeRankings[0].name}</h4>
+                          <p className="text-white text-sm opacity-90">{likeRankings[0].tags?.category?.[0] || 'Món ăn'}</p>
+                          <p className="text-white font-bold mt-1">❤️ {likeRankings[0].likeCount || 0} lượt thích</p>
+                        </div>
+                        <img
+                          src={(() => {
+                            let url = likeRankings[0].image;
+                            if (!url.startsWith('http')) {
+                              if (!url.startsWith('/')) url = '/' + url;
+                              url = `http://localhost:5000${url}`;
+                            }
+                            return url;
+                          })()}
+                          alt={likeRankings[0].name}
+                          className="w-20 h-20 object-cover rounded shadow"
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            if (!img.src.includes('placeholder')) {
+                              img.src = 'https://via.placeholder.com/80x80?text=Ảnh';
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Rest of Rankings */}
+                  {likeRankings.length > 1 && (
+                    <div className="bg-white rounded-lg shadow">
+                      <table className="w-full text-sm">
+                        <tbody>
+                          {likeRankings.slice(1).map((food: any, index: number) => (
+                            <tr
+                              key={food._id}
+                              className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition cursor-pointer"
+                              onClick={() => navigate(`/foods/${food._id}`)}
+                            >
+                              <td className="px-4 py-3 w-10">
+                                <span className="inline-flex items-center justify-center w-8 h-8 bg-red-100 text-red-600 font-bold rounded-full text-xs">
+                                  {index + 2}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 font-medium text-gray-800">{food.name}</td>
+                              <td className="px-4 py-3 text-right">
+                                <span className="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold text-xs">
+                                  ❤️ {food.likeCount || 0}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
+                </div>
+              )}
             </div>
 
             {/* Recommendations Ranking Table */}
-            <div>
+            <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Xếp Hạng Đề Cử</h3>
-              <div className="bg-white rounded-lg shadow">
-                {recommendLoading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <p className="text-gray-600">Đang tải xếp hạng...</p>
-                  </div>
-                ) : recommendRankings.length > 0 ? (
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-                        <th className="px-3 py-2 text-left font-semibold w-8">STT</th>
-                        <th className="px-3 py-2 text-left font-semibold">Tên Món</th>
-                        <th className="px-3 py-2 text-center font-semibold w-16">Đề Cử</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recommendRankings.map((food: any, index: number) => (
-                        <tr key={food._id} className="border-b last:border-b-0 hover:bg-gray-50 transition cursor-pointer" onClick={() => navigate(`/foods/${food._id}`)}>
-                          <td className="px-3 py-2">
-                            <span className="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 font-bold rounded-full text-xs">
-                              {index + 1}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 font-medium text-gray-800 truncate">{food.name}</td>
-                          <td className="px-3 py-2 text-center">
-                            <span className="inline-block bg-green-100 text-green-700 px-2 py-0.5 rounded font-semibold text-xs">
-                              {food.recommendationCount || 0}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className="flex items-center justify-center py-8">
-                    <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
-                  </div>
-                )}
-              </div>
+              {recommendLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-gray-600">Đang tải xếp hạng...</p>
+                </div>
+              ) : recommendRankings.length > 0 ? (
+                <div className="space-y-4 flex-1">
+                  {/* Top 1 - Featured Card */}
+                  {recommendRankings[0] && (
+                    <div
+                      className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition transform hover:scale-105"
+                      onClick={() => navigate(`/foods/${recommendRankings[0]._id}`)}
+                    >
+                      <div className="flex items-center p-4 gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-md">
+                            <span className="text-3xl font-bold text-green-600">🥇</span>
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-white truncate">{recommendRankings[0].name}</h4>
+                          <p className="text-white text-sm opacity-90">{recommendRankings[0].tags?.category?.[0] || 'Món ăn'}</p>
+                          <p className="text-white font-bold mt-1">⭐ {recommendRankings[0].recommendationCount || 0} đề cử</p>
+                        </div>
+                        <img
+                          src={(() => {
+                            let url = recommendRankings[0].image;
+                            if (!url.startsWith('http')) {
+                              if (!url.startsWith('/')) url = '/' + url;
+                              url = `http://localhost:5000${url}`;
+                            }
+                            return url;
+                          })()}
+                          alt={recommendRankings[0].name}
+                          className="w-20 h-20 object-cover rounded shadow"
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            if (!img.src.includes('placeholder')) {
+                              img.src = 'https://via.placeholder.com/80x80?text=Ảnh';
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Rest of Rankings */}
+                  {recommendRankings.length > 1 && (
+                    <div className="bg-white rounded-lg shadow">
+                      <table className="w-full text-sm">
+                        <tbody>
+                          {recommendRankings.slice(1).map((food: any, index: number) => (
+                            <tr
+                              key={food._id}
+                              className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition cursor-pointer"
+                              onClick={() => navigate(`/foods/${food._id}`)}
+                            >
+                              <td className="px-4 py-3 w-10">
+                                <span className="inline-flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 font-bold rounded-full text-xs">
+                                  {index + 2}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 font-medium text-gray-800">{food.name}</td>
+                              <td className="px-4 py-3 text-right">
+                                <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold text-xs">
+                                  ⭐ {food.recommendationCount || 0}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-8">
+                  <p className="text-gray-600">Chưa có dữ liệu xếp hạng</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

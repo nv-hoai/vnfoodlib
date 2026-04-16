@@ -144,7 +144,7 @@ const MyContributionsPage: FC = () => {
                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                       <p className="text-sm font-semibold text-gray-700 mb-2">Các thay đổi:</p>
                       <ul className="space-y-1">
-                        {contribution.changes.map((change, idx) => (
+                        {contribution.changes.map((change: {field: string; oldValue: any; newValue: any}, idx: number) => (
                           <li key={idx} className="text-sm text-gray-600">
                             • <span className="font-medium">{change.field}:</span> {String(change.oldValue).substring(0, 50)}... → {String(change.newValue).substring(0, 50)}...
                           </li>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Collection } from '../api/collectionsApi';
+import type { Collection } from '../../../types';
 
 interface CollectionsState {
   selectedCollection: Collection | null;

@@ -168,8 +168,8 @@ const AdminContributionsPage: FC = () => {
                   </button>
                 ))}
                 <button
-                  onClick={() => setPage(Math.min(pagination.pages, page + 1))}
-                  disabled={page === pagination.pages}
+                  onClick={() => setPage(Math.min(pagination.pages || 1, page + 1))}
+                  disabled={page === (pagination.pages || 1)}
                   className="px-3 py-1 bg-gray-200 text-gray-800 rounded disabled:opacity-50 hover:bg-gray-300"
                 >
                   Sau

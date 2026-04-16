@@ -1,13 +1,10 @@
 import { Request } from 'express';
-import { File } from 'multer';
+import type { IUser } from '../../../features/users/models/Users.js';
 
 declare global {
   namespace Express {
-    interface User {
-      _id: any;
-      email: string;
-      name: string;
-    }
+    // Override the default User type to use our IUser
+    type User = IUser;
 
     interface Request {
       user?: User;
@@ -17,5 +14,5 @@ declare global {
 
 export interface MulterRequest extends Request {
   file?: Express.Multer.File;
-  user?: Express.User;
+  user?: IUser;
 }

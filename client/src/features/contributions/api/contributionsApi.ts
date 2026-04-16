@@ -1,44 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../app/api';
+import type { IContribution, IContributionData } from '../../../types';
 
-export interface IContributionData {
-  name?: string;
-  intro?: string;
-  ingredients?: string;
-  cooking?: string;
-  tags?: {
-    category?: string[];
-    ingredient?: string[];
-    meal_time?: string[];
-    cooking_method?: string[];
-    taste?: string[];
-    purpose?: string[];
-    diet?: string[];
-  };
-  image?: string;
-}
-
-export interface IContributionChange {
-  field: string;
-  oldValue: any;
-  newValue: any;
-}
-
-export interface IContribution {
-  _id: string;
-  type: 'new_food' | 'edit_food';
-  status: 'pending' | 'approved' | 'rejected' | 'archived';
-  submittedBy: string;
-  foodId?: string;
-  data: IContributionData;
-  changes?: IContributionChange[];
-  reviewedBy?: string;
-  reviewedAt?: string;
-  rejectionReason?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export type { IContribution, IContributionData };
 
 export interface ContributionResponse {
   success: boolean;

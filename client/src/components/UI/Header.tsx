@@ -42,6 +42,11 @@ const Header: FC = () => {
             </Link>
           </li>
           <li>
+            <Link to='/classify' className='text-gray-700 hover:text-blue-600 transition'>
+              Nhận diện
+            </Link>
+          </li>
+          <li>
             <Link to='/about' className='text-gray-700 hover:text-blue-600 transition'>
               Giới thiệu
             </Link>

@@ -1,9 +1,5 @@
-import React, { FC, ButtonHTMLAttributes, ReactNode } from "react";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
-}
+import React, { FC } from "react";
+import type { ButtonProps } from '@/types';
 
 const Button: FC<ButtonProps> = ({ 
   children, 

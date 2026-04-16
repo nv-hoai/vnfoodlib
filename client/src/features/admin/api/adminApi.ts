@@ -1,92 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../app/api';
-import { IContribution } from '../../contributions/api/contributionsApi';
+import type { 
+  IActivityLog, 
+  IUserInfo,
+  DashboardStats,
+  DashboardStatsResponse,
+  AdminResponse,
+  PendingContributionsResponse,
+  SuspendUserPayload
+} from '../../../types';
+import type { IContribution } from '../../contributions/api/contributionsApi';
 
-export interface IActivityLog {
-  _id: string;
-  action: string;
-  actor: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  target: {
-    type: 'contribution' | 'user' | 'food';
-    id: string;
-  };
-  reason?: string;
-  details?: string;
-  changes?: {
-    [key: string]: {
-      oldValue: any;
-      newValue: any;
-    };
-  };
-  createdAt: string;
-}
-
-export interface IUserInfo {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin' | 'moderator';
-  status: 'active' | 'suspended' | 'banned';
-  isActive: boolean;
-  contributionsCount: number;
-  approvedContributions: number;
-  suspendedUntil?: string;
-  suspendReason?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface DashboardStats {
-  users: {
-    total: number;
-    active: number;
-    suspended: number;
-    banned: number;
-    newThisMonth: number;
-    newThisYear: number;
-  };
-  foods: {
-    total: number;
-    newThisMonth: number;
-  };
-  contributions: {
-    total: number;
-    pending: number;
-    approved: number;
-    rejected: number;
-    approvalRate: string;
-  };
-  recentActivity: IActivityLog[];
-}
-
-export interface DashboardStatsResponse {
-  success: boolean;
-  message: string;
-  data: DashboardStats;
-}
-
-export interface AdminResponse {
-  success: boolean;
-  message: string;
-  data: {
-    contribution?: IContribution;
-    contributions?: IContribution[];
-    user?: IUserInfo;
-    users?: IUserInfo[];
-    stats?: DashboardStats;
-    activities?: IActivityLog[];
-    pagination?: {
-      page: number;
-      limit: number;
-      total: number;
-      pages: number;
-    };
-  };
-}
+export type { IActivityLog, IUserInfo, DashboardStats, IContribution };
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',

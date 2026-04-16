@@ -8,9 +8,7 @@ import {
   useRecommendFoodMutation,
   useAddToCollectionMutation
 } from '../features/foods/api/foodApi';
-import type { RootState } from '../app/store';
-
-type TabType = 'intro' | 'ingredients' | 'cooking';
+import type { RootState, TabType } from '../types';
 
 const FoodDetailPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -133,7 +131,7 @@ const FoodDetailPage: FC = () => {
 
             {/* Tags */}
             <div className="mb-4">
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-between">
                 {food.tags.category?.map((tag: string) => (
                   <span key={tag} className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">
                     {tag}
@@ -192,7 +190,7 @@ const FoodDetailPage: FC = () => {
                 }}
                 className="py-2 px-4 bg-purple-500 text-white rounded-lg font-semibold hover:bg-purple-600 transition-colors"
               >
-                ✏️ Đóng góp
+                Đóng góp
               </button>
             </div>
           </div>

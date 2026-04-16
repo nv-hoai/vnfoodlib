@@ -1,21 +1,15 @@
 import React, { FC } from 'react';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface UserInfoCardProps {
-  user: User;
-  onEdit?: () => void;
-}
+import type { UserInfoCardProps } from '@/types';
 
 const UserInfoCard: FC<UserInfoCardProps> = ({ user, onEdit }) => {
+  if (!user) {
+    return (
+      <div className='bg-white rounded-lg shadow-md p-6 text-center'>
+        <p className='text-gray-500'>Không có thông tin người dùng</p>
+      </div>
+    );
+  }
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('vi-VN', {
       year: 'numeric',

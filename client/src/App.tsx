@@ -19,6 +19,7 @@ import MyContributionsPage from './pages/MyContributionsPage';
 import ContributeNewFoodPage from './pages/ContributeNewFoodPage';
 import ContributeEditFoodPage from './pages/ContributeEditFoodPage';
 import NotificationCenterPage from './pages/NotificationCenterPage';
+import ImageClassifierPage from './pages/ImageClassifierPage';
 import AdminNotificationsPage from './pages/admin/AdminNotificationsPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminContributionsPage from './pages/admin/AdminContributionsPage';
@@ -47,6 +48,7 @@ const App: FC = () => {
             <Route path='/contributions/new-food' element={<ContributeNewFoodPage />} />
             <Route path='/contributions/edit-food/:id' element={<ContributeEditFoodPage />} />
             <Route path='/notifications' element={<NotificationCenterPage />} />
+            <Route path='/classify' element={<ImageClassifierPage />} />
           </Route>
 
           {/* Admin Routes */}

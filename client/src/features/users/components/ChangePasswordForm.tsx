@@ -2,12 +2,7 @@ import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-interface ChangePasswordFormProps {
-  onSubmit: (data: { currentPassword: string; newPassword: string; confirmPassword: string }) => Promise<void>;
-  onCancel: () => void;
-  isLoading?: boolean;
-}
+import type { ChangePasswordFormProps } from '@/types';
 
 const passwordSchema = z.object({
   currentPassword: z

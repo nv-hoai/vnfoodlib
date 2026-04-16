@@ -91,3 +91,24 @@ FoodData.csv
 
 # Uploads
 uploads/
+
+# Python (AI Server)
+ai-server/venv/
+ai-server/__pycache__/
+ai-server/*.pyc
+ai-server/*.pyo
+ai-server/*.pyd
+ai-server/.Python
+ai-server/env/
+ai-server/ENV/
+ai-server/.egg-info/
+ai-server/*.egg
+ai-server/dist/
+ai-server/build/
+ai-server/.pytest_cache/
+ai-server/.coverage
+
+# ONNX Model files (too large for git)
+ai-server/model/*.onnx
+ai-server/model/*.onnx.data
+ai-server/model/*.pth

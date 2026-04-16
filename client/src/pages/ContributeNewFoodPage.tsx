@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSubmitNewFoodMutation } from '../features/contributions/api/contributionsApi';
-import { IContributionData } from '../features/contributions/api/contributionsApi';
 import Button from '../shared/components/Button';
-
-type TagKey = 'category' | 'ingredient' | 'meal_time' | 'cooking_method' | 'taste' | 'purpose' | 'diet';
+import type { TagKey, IContributionData } from '../types';
 
 const CATEGORIES = ['Cơm', 'Mì Ý', 'Salad', 'Soup', 'Dessert', 'Drink', 'Snack'];
 const INGREDIENTS = ['Gà', 'Cá', 'Thịt Bò', 'Tôm', 'Trứng', 'Rau', 'Nấm'];
@@ -40,7 +38,7 @@ const ContributeNewFoodPage: FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: IContributionData) => ({
       ...prev,
       [name]: value
     }));
@@ -51,7 +49,7 @@ const ContributeNewFoodPage: FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
+        setFormData((prev: IContributionData) => ({
           ...prev,
           image: reader.result as string
         }));
@@ -61,14 +59,14 @@ const ContributeNewFoodPage: FC = () => {
   };
 
   const handleTagToggle = (tagType: TagKey, tag: string) => {
-    setFormData(prev => {
+    setFormData((prev: IContributionData) => {
       const currentTags = prev.tags![tagType] as string[];
       return {
         ...prev,
         tags: {
           ...prev.tags!,
           [tagType]: currentTags.includes(tag)
-            ? currentTags.filter(t => t !== tag)
+            ? currentTags.filter((t: string) => t !== tag)
             : [...currentTags, tag]
         }
       };
@@ -321,7 +319,7 @@ const ContributeNewFoodPage: FC = () => {
               disabled={isLoading}
               className="flex-1"
             >
-              {isLoading ? 'Đang gửi...' : '✓ Gửi Đóng Góp'}
+              {isLoading ? 'Đang gửi...' : 'Gửi Đóng Góp'}
             </Button>
             <Button
               type="button"

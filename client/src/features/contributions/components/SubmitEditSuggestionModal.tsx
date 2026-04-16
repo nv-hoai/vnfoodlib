@@ -16,7 +16,7 @@ const SubmitEditSuggestionModal: FC<SubmitEditSuggestionModalProps> = ({ isOpen,
   const [success, setSuccess] = useState(false);
 
   const handleInputChange = (field: string, value: any) => {
-    setChanges(prev => ({
+    setChanges((prev: Partial<IContributionData>) => ({
       ...prev,
       [field]: value
     }));

@@ -1,39 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../app/api';
-
-export interface Collection {
-  _id: string;
-  userId: string;
-  name: string;
-  description?: string;
-  dishes: string[];
-  isPublic: boolean;
-  tags?: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CollectionResponse {
-  status: string;
-  data: {
-    collection?: Collection;
-    collections?: Collection[];
-  };
-}
-
-export interface CreateCollectionPayload {
-  name: string;
-  description?: string;
-  isPublic?: boolean;
-  tags?: string[];
-}
-
-export interface UpdateCollectionPayload {
-  name?: string;
-  description?: string;
-  isPublic?: boolean;
-  tags?: string[];
-}
+import type { 
+  Collection, 
+  CollectionResponse, 
+  CreateCollectionPayload, 
+  UpdateCollectionPayload 
+} from '../../../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 

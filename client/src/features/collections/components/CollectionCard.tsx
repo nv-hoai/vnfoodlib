@@ -1,12 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Collection } from '../api/collectionsApi';
+import type { CollectionCardProps } from '@/types';
 import Button from '../../../shared/components/Button';
-
-interface CollectionCardProps {
-  collection: Collection;
-  onSelect?: (collection: Collection) => void;
-}
 
 const CollectionCard: FC<CollectionCardProps> = ({ collection, onSelect }) => {
   const dishCount = collection.dishes?.length || 0;

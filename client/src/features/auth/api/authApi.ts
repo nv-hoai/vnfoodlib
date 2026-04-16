@@ -2,36 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logout, refresh } from '../slices/authSlice';
 import { setUser, clearUser } from '../../users';
 import { baseQueryWithReauth } from '../../../app/api';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'user' | 'admin';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface AuthResponse {
-  user: User;
-  accessToken: string;
-}
-
-interface RegisterPayload {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-interface RefreshResponse {
-  accessToken: string;
-}
+import type { AuthResponse, RegisterPayload, LoginPayload, RefreshResponse } from '../../../types';
 
 export const authApi = createApi({
   reducerPath: 'authApi',

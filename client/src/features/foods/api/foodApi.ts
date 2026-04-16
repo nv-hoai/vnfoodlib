@@ -1,56 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { Tags, Food, FoodResponse } from '../../../types';
+
+export type { Food, FoodResponse };
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:5000/api';
-
-export interface Tags {
-  category?: string[];
-  ingredient?: string[];
-  meal_time?: string[];
-  cooking_method?: string[];
-  taste?: string[];
-  purpose?: string[];
-  diet?: string[];
-}
-
-export interface Food {
-  _id: string;
-  name: string;
-  intro: string;
-  ingredients: string;
-  cooking: string;
-  tags: Tags;
-  image: string;
-  likes: string[];
-  likeCount: number;
-  recommendations: Array<{
-    userId: string;
-    count: number;
-    monthResetCount: number;
-    lastResetDate: string;
-  }>;
-  recommendationCount: number;
-  recommendationAllTime: number;
-  inCollections: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface FoodResponse {
-  success: boolean;
-  message: string;
-  data: {
-    food?: Food;
-    foods?: Food[];
-    pagination?: {
-      page: number;
-      limit: number;
-      total: number;
-      pages?: number;
-    };
-    hasLiked?: boolean;
-    imageUrl?: string;
-  };
-}
 
 export const foodApi = createApi({
   reducerPath: 'foodApi',

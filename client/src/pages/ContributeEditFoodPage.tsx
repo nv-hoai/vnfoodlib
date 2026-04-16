@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetFoodByIdQuery } from '../features/foods/api/foodApi';
 import { useSubmitFoodEditMutation } from '../features/contributions/api/contributionsApi';
-import { IContributionData } from '../features/contributions/api/contributionsApi';
 import Button from '../shared/components/Button';
-type TagKey = 'category' | 'ingredient' | 'meal_time' | 'cooking_method' | 'taste' | 'purpose' | 'diet';
+import type { TagKey, IContributionData } from '../types';
+
 const CATEGORIES = ['Cơm', 'Mì Ý', 'Salad', 'Soup', 'Dessert', 'Drink', 'Snack'];
 const MEAL_TIMES = ['Sáng', 'Trưa', 'Tối', 'Nhẹ'];
 const COOKING_METHODS = ['Nướng', 'Luộc', 'Xào', 'Hấp', 'Kho', 'Chiên'];
@@ -70,7 +70,7 @@ const ContributeEditFoodPage: FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: IContributionData) => ({
       ...prev,
       [name]: value
     }));
@@ -81,7 +81,7 @@ const ContributeEditFoodPage: FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
+        setFormData((prev: IContributionData) => ({
           ...prev,
           image: reader.result as string
         }));
@@ -91,14 +91,14 @@ const ContributeEditFoodPage: FC = () => {
   };
 
   const handleTagToggle = (tagType: TagKey, tag: string) => {
-    setFormData(prev => {
+    setFormData((prev: IContributionData) => {
       const currentTags = prev.tags![tagType] as string[];
       return {
         ...prev,
         tags: {
           ...prev.tags!,
           [tagType]: currentTags.includes(tag)
-            ? currentTags.filter(t => t !== tag)
+            ? currentTags.filter((t: string) => t !== tag)
             : [...currentTags, tag]
         }
       };
@@ -220,7 +220,7 @@ const ContributeEditFoodPage: FC = () => {
                     <p className="text-xs text-gray-600 mb-2">Ảnh hiện tại:</p>
                     {food.image && (
                       <img
-                        src={food.image}
+                        src={`http://localhost:5000${food.image}`}
                         alt="Current"
                         className="w-40 h-40 object-cover rounded-lg"
                       />

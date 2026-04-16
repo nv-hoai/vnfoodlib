@@ -8,6 +8,7 @@ import mealSchedulingReducer from '../features/mealScheduling/slices/mealSchedul
 import { collectionsApi } from '../features/collections/api/collectionsApi';
 import collectionsReducer from '../features/collections/slices/collectionsSlice';
 import { foodApi } from '../features/foods/api/foodApi';
+import { foodClassificationApi } from '../features/foods/api/foodClassificationApi';
 import { contributionsApi } from '../features/contributions/api/contributionsApi';
 import { adminApi } from '../features/admin/api/adminApi';
 import { notificationsApi } from '../features/notifications/api/notificationsApi';
@@ -23,6 +24,7 @@ export const store = configureStore({
     [mealSchedulingApi.reducerPath]: mealSchedulingApi.reducer,
     [collectionsApi.reducerPath]: collectionsApi.reducer,
     [foodApi.reducerPath]: foodApi.reducer,
+    [foodClassificationApi.reducerPath]: foodClassificationApi.reducer,
     [contributionsApi.reducerPath]: contributionsApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
@@ -34,6 +36,7 @@ export const store = configureStore({
       mealSchedulingApi.middleware,
       collectionsApi.middleware,
       foodApi.middleware,
+      foodClassificationApi.middleware,
       contributionsApi.middleware,
       adminApi.middleware,
       notificationsApi.middleware

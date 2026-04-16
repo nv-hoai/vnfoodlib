@@ -1,34 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../app/api';
+import type { INotification, NotificationResponse, CreateNotificationPayload } from '../../../types';
 
-export interface INotification {
-  _id: string;
-  type: 'system' | 'contribution' | 'admin' | 'achievement';
-  title: string;
-  message: string;
-  read: boolean;
-  link?: string;
-  targetUsers?: string[];
-  sentBy?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface NotificationResponse {
-  success: boolean;
-  message: string;
-  data: {
-    notification?: INotification;
-    notifications?: INotification[];
-    unreadCount?: number;
-    pagination?: {
-      page: number;
-      limit: number;
-      total: number;
-      pages: number;
-    };
-  };
-}
+export type { INotification, NotificationResponse };
 
 export const notificationsApi = createApi({
   reducerPath: 'notificationsApi',

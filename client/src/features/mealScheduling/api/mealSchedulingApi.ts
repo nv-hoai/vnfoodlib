@@ -1,39 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../app/api';
+import type { 
+  MealSchedule, 
+  CreateMealSchedulePayload, 
+  MealScheduleResponse 
+} from '../../../types';
 
-export interface MealSchedule {
-  _id: string;
-  userId: string;
-  date: string;
-  meals: {
-    breakfast?: string;
-    lunch?: string;
-    dinner?: string;
-    snacks?: string;
-  };
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateMealSchedulePayload {
-  date: string;
-  meals: {
-    breakfast?: string;
-    lunch?: string;
-    dinner?: string;
-    snacks?: string;
-  };
-  notes?: string;
-}
-
-export interface MealScheduleResponse {
-  status: string;
-  data: {
-    schedule?: MealSchedule;
-    schedules?: MealSchedule[];
-  };
-}
+export type { MealSchedule, MealScheduleResponse };
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 

@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Food } from '../api/foodApi';
-
-interface FoodCardProps {
-  food: Food;
-}
+import type { FoodCardProps } from '@/types';
 
 export const FoodCard: FC<FoodCardProps> = ({ food }) => {
   const navigate = useNavigate();
