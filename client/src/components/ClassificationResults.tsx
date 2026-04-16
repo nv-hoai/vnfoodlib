@@ -74,7 +74,7 @@ export const ClassificationResultCard: FC<ClassificationResultCardProps> = ({
 
       {onViewFood && (
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
           onClick={onViewFood}
           className="w-full"
